@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Github, Play, Shield, Zap } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Hero = () => {
   return (
@@ -35,9 +36,11 @@ const Hero = () => {
 
           {/* CTAs */}
           <div className="animate-fade-up-delay-3 flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button variant="hero" size="xl" className="w-full sm:w-auto">
-              <Github className="w-5 h-5" />
-              Install GitHub App
+            <Button variant="hero" size="xl" className="w-full sm:w-auto" asChild>
+              <Link to="/dashboard">
+                <Github className="w-5 h-5" />
+                Install GitHub App
+              </Link>
             </Button>
             <Button variant="heroOutline" size="xl" className="w-full sm:w-auto">
               <Play className="w-5 h-5" />

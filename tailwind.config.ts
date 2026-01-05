@@ -61,6 +61,15 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        severity: {
+          high: "hsl(var(--severity-high))",
+          medium: "hsl(var(--severity-medium))",
+          low: "hsl(var(--severity-low))",
+        },
+        status: {
+          connected: "hsl(var(--status-connected))",
+          disconnected: "hsl(var(--status-disconnected))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
