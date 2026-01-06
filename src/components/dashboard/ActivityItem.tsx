@@ -1,4 +1,5 @@
 import { GitPullRequest, ExternalLink, Clock } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 
@@ -68,14 +69,16 @@ export function ActivityItem({ activity }: ActivityItemProps) {
         )}
       </div>
 
-      <Button
-        variant="ghost"
-        size="sm"
-        className="opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
-      >
-        <ExternalLink className="h-3.5 w-3.5 mr-1" />
-        View PR
-      </Button>
+      <Link to={`/pr/${activity.prNumber}`}>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
+        >
+          <ExternalLink className="h-3.5 w-3.5 mr-1" />
+          View PR
+        </Button>
+      </Link>
     </div>
   );
 }
