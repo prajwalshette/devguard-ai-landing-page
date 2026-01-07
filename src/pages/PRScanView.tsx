@@ -1,4 +1,4 @@
-import { ArrowLeft, GitPullRequest, Clock, AlertTriangle, CheckCircle, XCircle } from "lucide-react";
+import { ArrowLeft, GitPullRequest, Clock, AlertTriangle, CheckCircle, XCircle, EyeOff } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -6,6 +6,7 @@ import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TopNavigation } from "@/components/dashboard/TopNavigation";
 import { VulnerabilityCard } from "@/components/dashboard/VulnerabilityCard";
+import { useDismissedVulnerabilities, DismissReason } from "@/hooks/useDismissedVulnerabilities";
 
 const mockVulnerabilities = [
   {
@@ -107,11 +108,28 @@ app.post('/login', loginLimiter, async (req, res) => {
 
 const PRScanView = () => {
   const { prId } = useParams();
+  const { dismissed, dismissVulnerability, restoreVulnerability, getInfo } = useDismissedVulnerabilities();
 
-  const highCount = mockVulnerabilities.filter((v) => v.severity === "high").length;
-  const mediumCount = mockVulnerabilities.filter((v) => v.severity === "medium").length;
-  const lowCount = mockVulnerabilities.filter((v) => v.severity === "low").length;
-  const totalCount = mockVulnerabilities.length;
+  const activeVulnerabilities = mockVulnerabilities.filter(
+    (v) => !dismissed.some((d) => d.id === v.id)
+  );
+  const dismissedVulnerabilities = mockVulnerabilities.filter(
+    (v) => dismissed.some((d) => d.id === v.id)
+  );
+
+  const highCount = activeVulnerabilities.filter((v) => v.severity === "high").length;
+  const mediumCount = activeVulnerabilities.filter((v) => v.severity === "medium").length;
+  const lowCount = activeVulnerabilities.filter((v) => v.severity === "low").length;
+  const totalCount = activeVulnerabilities.length;
+  const dismissedCount = dismissedVulnerabilities.length;
+
+  const handleDismiss = (id: string, reason: DismissReason) => {
+    dismissVulnerability(id, reason);
+  };
+
+  const handleRestore = (id: string) => {
+    restoreVulnerability(id);
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -199,36 +217,88 @@ const PRScanView = () => {
             <TabsTrigger value="high">High ({highCount})</TabsTrigger>
             <TabsTrigger value="medium">Medium ({mediumCount})</TabsTrigger>
             <TabsTrigger value="low">Low ({lowCount})</TabsTrigger>
+            <TabsTrigger value="dismissed" className="flex items-center gap-1">
+              <EyeOff className="h-3 w-3" />
+              Dismissed ({dismissedCount})
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="all" className="space-y-4">
-            {mockVulnerabilities.map((vuln) => (
-              <VulnerabilityCard key={vuln.id} {...vuln} />
-            ))}
+            {activeVulnerabilities.length === 0 ? (
+              <div className="text-center py-8 text-muted-foreground">
+                No active vulnerabilities found.
+              </div>
+            ) : (
+              activeVulnerabilities.map((vuln) => (
+                <VulnerabilityCard 
+                  key={vuln.id} 
+                  {...vuln} 
+                  onDismiss={handleDismiss}
+                  onRestore={handleRestore}
+                />
+              ))
+            )}
           </TabsContent>
 
           <TabsContent value="high" className="space-y-4">
-            {mockVulnerabilities
+            {activeVulnerabilities
               .filter((v) => v.severity === "high")
               .map((vuln) => (
-                <VulnerabilityCard key={vuln.id} {...vuln} />
+                <VulnerabilityCard 
+                  key={vuln.id} 
+                  {...vuln} 
+                  onDismiss={handleDismiss}
+                  onRestore={handleRestore}
+                />
               ))}
           </TabsContent>
 
           <TabsContent value="medium" className="space-y-4">
-            {mockVulnerabilities
+            {activeVulnerabilities
               .filter((v) => v.severity === "medium")
               .map((vuln) => (
-                <VulnerabilityCard key={vuln.id} {...vuln} />
+                <VulnerabilityCard 
+                  key={vuln.id} 
+                  {...vuln} 
+                  onDismiss={handleDismiss}
+                  onRestore={handleRestore}
+                />
               ))}
           </TabsContent>
 
           <TabsContent value="low" className="space-y-4">
-            {mockVulnerabilities
+            {activeVulnerabilities
               .filter((v) => v.severity === "low")
               .map((vuln) => (
-                <VulnerabilityCard key={vuln.id} {...vuln} />
+                <VulnerabilityCard 
+                  key={vuln.id} 
+                  {...vuln} 
+                  onDismiss={handleDismiss}
+                  onRestore={handleRestore}
+                />
               ))}
+          </TabsContent>
+
+          <TabsContent value="dismissed" className="space-y-4">
+            {dismissedVulnerabilities.length === 0 ? (
+              <div className="text-center py-8 text-muted-foreground">
+                No dismissed vulnerabilities.
+              </div>
+            ) : (
+              dismissedVulnerabilities.map((vuln) => {
+                const info = getInfo(vuln.id);
+                return (
+                  <VulnerabilityCard 
+                    key={vuln.id} 
+                    {...vuln} 
+                    isDismissed={true}
+                    dismissReason={info?.reason}
+                    onDismiss={handleDismiss}
+                    onRestore={handleRestore}
+                  />
+                );
+              })
+            )}
           </TabsContent>
         </Tabs>
       </main>
