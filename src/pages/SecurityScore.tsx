@@ -14,6 +14,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useState } from "react";
+import { exportSecurityReportPDF } from "@/utils/exportSecurityReport";
+import { toast } from "sonner";
 
 // Mock data for trends over time
 const trendData = [
@@ -50,6 +52,26 @@ const topVulnerabilities = [
 const SecurityScore = () => {
   const [timeRange, setTimeRange] = useState("7d");
 
+  const timeRangeLabels: Record<string, string> = {
+    "7d": "Last 7 days",
+    "30d": "Last 30 days",
+    "90d": "Last 90 days",
+    "1y": "Last year",
+  };
+
+  const handleExportPDF = () => {
+    exportSecurityReportPDF({
+      score: 78,
+      scoreChange: 5,
+      trendData,
+      severityData,
+      resolutionData,
+      topVulnerabilities,
+      timeRange: timeRangeLabels[timeRange],
+    });
+    toast.success("Security report exported successfully!");
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <TopNavigation isConnected={true} plan="free" />
@@ -76,9 +98,9 @@ const SecurityScore = () => {
                 <SelectItem value="1y">Last year</SelectItem>
               </SelectContent>
             </Select>
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" onClick={handleExportPDF}>
               <Download className="h-4 w-4 mr-2" />
-              Export Report
+              Export PDF
             </Button>
           </div>
         </div>
