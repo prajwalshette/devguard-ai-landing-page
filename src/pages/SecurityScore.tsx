@@ -6,6 +6,7 @@ import { SecurityScoreCard } from "@/components/dashboard/SecurityScoreCard";
 import { VulnerabilityTrendChart } from "@/components/dashboard/VulnerabilityTrendChart";
 import { SeverityBreakdownChart } from "@/components/dashboard/SeverityBreakdownChart";
 import { ResolutionRateChart } from "@/components/dashboard/ResolutionRateChart";
+import { PDFPreviewModal } from "@/components/dashboard/PDFPreviewModal";
 import {
   Select,
   SelectContent,
@@ -13,8 +14,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useState, useRef } from "react";
-import { exportSecurityReportPDF } from "@/utils/exportSecurityReport";
+import { useState, useRef, useCallback } from "react";
+import { generateSecurityReportPDF, PDFResult } from "@/utils/exportSecurityReport";
 import { toast } from "sonner";
 
 // Mock data for trends over time
@@ -52,6 +53,8 @@ const topVulnerabilities = [
 const SecurityScore = () => {
   const [timeRange, setTimeRange] = useState("7d");
   const [isExporting, setIsExporting] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
+  const [pdfResult, setPdfResult] = useState<PDFResult | null>(null);
 
   // Refs for chart capture
   const scoreCardRef = useRef<HTMLDivElement>(null);
@@ -69,7 +72,7 @@ const SecurityScore = () => {
   const handleExportPDF = async () => {
     setIsExporting(true);
     try {
-      await exportSecurityReportPDF({
+      const result = await generateSecurityReportPDF({
         score: 78,
         scoreChange: 5,
         trendData,
@@ -84,14 +87,30 @@ const SecurityScore = () => {
           resolutionChart: resolutionChartRef.current,
         },
       });
-      toast.success("Security report exported with charts!");
+      setPdfResult(result);
+      setShowPreview(true);
     } catch (error) {
-      toast.error("Failed to export report");
+      toast.error("Failed to generate report");
       console.error(error);
     } finally {
       setIsExporting(false);
     }
   };
+
+  const handleClosePreview = useCallback(() => {
+    setShowPreview(false);
+    if (pdfResult?.url) {
+      URL.revokeObjectURL(pdfResult.url);
+    }
+    setPdfResult(null);
+  }, [pdfResult]);
+
+  const handleDownload = useCallback(() => {
+    if (pdfResult) {
+      pdfResult.download();
+      toast.success("Security report downloaded!");
+    }
+  }, [pdfResult]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -130,7 +149,7 @@ const SecurityScore = () => {
               ) : (
                 <Download className="h-4 w-4 mr-2" />
               )}
-              {isExporting ? "Exporting..." : "Export PDF"}
+              {isExporting ? "Generating..." : "Export PDF"}
             </Button>
           </div>
         </div>
@@ -209,6 +228,15 @@ const SecurityScore = () => {
           </div>
         </div>
       </main>
+
+      {/* PDF Preview Modal */}
+      <PDFPreviewModal
+        isOpen={showPreview}
+        onClose={handleClosePreview}
+        pdfUrl={pdfResult?.url ?? null}
+        fileName={pdfResult?.fileName ?? "security-report.pdf"}
+        onDownload={handleDownload}
+      />
     </div>
   );
 };
