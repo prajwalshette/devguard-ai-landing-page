@@ -1,4 +1,4 @@
-import { ArrowLeft, Calendar, Download } from "lucide-react";
+import { ArrowLeft, Calendar, Download, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { TopNavigation } from "@/components/dashboard/TopNavigation";
@@ -13,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { exportSecurityReportPDF } from "@/utils/exportSecurityReport";
 import { toast } from "sonner";
 
@@ -51,6 +51,13 @@ const topVulnerabilities = [
 
 const SecurityScore = () => {
   const [timeRange, setTimeRange] = useState("7d");
+  const [isExporting, setIsExporting] = useState(false);
+
+  // Refs for chart capture
+  const scoreCardRef = useRef<HTMLDivElement>(null);
+  const severityChartRef = useRef<HTMLDivElement>(null);
+  const trendChartRef = useRef<HTMLDivElement>(null);
+  const resolutionChartRef = useRef<HTMLDivElement>(null);
 
   const timeRangeLabels: Record<string, string> = {
     "7d": "Last 7 days",
@@ -59,17 +66,31 @@ const SecurityScore = () => {
     "1y": "Last year",
   };
 
-  const handleExportPDF = () => {
-    exportSecurityReportPDF({
-      score: 78,
-      scoreChange: 5,
-      trendData,
-      severityData,
-      resolutionData,
-      topVulnerabilities,
-      timeRange: timeRangeLabels[timeRange],
-    });
-    toast.success("Security report exported successfully!");
+  const handleExportPDF = async () => {
+    setIsExporting(true);
+    try {
+      await exportSecurityReportPDF({
+        score: 78,
+        scoreChange: 5,
+        trendData,
+        severityData,
+        resolutionData,
+        topVulnerabilities,
+        timeRange: timeRangeLabels[timeRange],
+        chartRefs: {
+          scoreCard: scoreCardRef.current,
+          severityChart: severityChartRef.current,
+          trendChart: trendChartRef.current,
+          resolutionChart: resolutionChartRef.current,
+        },
+      });
+      toast.success("Security report exported with charts!");
+    } catch (error) {
+      toast.error("Failed to export report");
+      console.error(error);
+    } finally {
+      setIsExporting(false);
+    }
   };
 
   return (
@@ -98,9 +119,18 @@ const SecurityScore = () => {
                 <SelectItem value="1y">Last year</SelectItem>
               </SelectContent>
             </Select>
-            <Button variant="outline" size="sm" onClick={handleExportPDF}>
-              <Download className="h-4 w-4 mr-2" />
-              Export PDF
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={handleExportPDF}
+              disabled={isExporting}
+            >
+              {isExporting ? (
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              ) : (
+                <Download className="h-4 w-4 mr-2" />
+              )}
+              {isExporting ? "Exporting..." : "Export PDF"}
             </Button>
           </div>
         </div>
@@ -119,18 +149,24 @@ const SecurityScore = () => {
         <div className="grid gap-6">
           {/* Top Row - Score + Breakdown */}
           <div className="grid lg:grid-cols-3 gap-6">
-            <SecurityScoreCard score={78} change={5} period="last month" />
-            <div className="lg:col-span-2">
+            <div ref={scoreCardRef}>
+              <SecurityScoreCard score={78} change={5} period="last month" />
+            </div>
+            <div className="lg:col-span-2" ref={severityChartRef}>
               <SeverityBreakdownChart data={severityData} />
             </div>
           </div>
 
           {/* Middle Row - Trend Chart */}
-          <VulnerabilityTrendChart data={trendData} />
+          <div ref={trendChartRef}>
+            <VulnerabilityTrendChart data={trendData} />
+          </div>
 
           {/* Bottom Row - Resolution + Top Issues */}
           <div className="grid lg:grid-cols-2 gap-6">
-            <ResolutionRateChart data={resolutionData} />
+            <div ref={resolutionChartRef}>
+              <ResolutionRateChart data={resolutionData} />
+            </div>
             
             {/* Top Vulnerability Types */}
             <div className="border border-border/50 bg-card/50 rounded-lg p-6 backdrop-blur-sm">
