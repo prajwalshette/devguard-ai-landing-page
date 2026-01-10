@@ -1,14 +1,12 @@
-import { TopNavigation } from "@/components/dashboard/TopNavigation";
+import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { DashboardStats } from "@/components/dashboard/DashboardStats";
 import { RepositoryList } from "@/components/dashboard/RepositoryList";
 import { RecentActivity } from "@/components/dashboard/RecentActivity";
 
 const Dashboard = () => {
   return (
-    <div className="min-h-screen bg-background">
-      <TopNavigation isConnected={true} plan="free" />
-
-      <main className="container py-8">
+    <DashboardLayout>
+      <div className="container py-8">
         <div className="mb-8">
           <h1 className="text-2xl font-semibold text-foreground mb-1">Dashboard</h1>
           <p className="text-muted-foreground">Monitor your code security across all repositories</p>
@@ -26,8 +24,8 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-      </main>
-    </div>
+      </div>
+    </DashboardLayout>
   );
 };
 
