@@ -1,7 +1,6 @@
-import { ArrowLeft, Calendar, Download, Loader2 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Calendar, Download, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { TopNavigation } from "@/components/dashboard/TopNavigation";
+import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { SecurityScoreCard } from "@/components/dashboard/SecurityScoreCard";
 import { VulnerabilityTrendChart } from "@/components/dashboard/VulnerabilityTrendChart";
 import { SeverityBreakdownChart } from "@/components/dashboard/SeverityBreakdownChart";
@@ -113,18 +112,10 @@ const SecurityScore = () => {
   }, [pdfResult]);
 
   return (
-    <div className="min-h-screen bg-background">
-      <TopNavigation isConnected={true} plan="free" />
-
-      <main className="container mx-auto px-4 py-6 max-w-7xl">
-        {/* Back Navigation */}
-        <div className="flex items-center justify-between mb-6">
-          <Link to="/dashboard">
-            <Button variant="ghost" size="sm" className="-ml-2">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Dashboard
-            </Button>
-          </Link>
+    <DashboardLayout>
+      <div className="container mx-auto px-4 py-6 max-w-7xl">
+        {/* Header with Actions */}
+        <div className="flex items-center justify-end mb-6 gap-3">
           <div className="flex items-center gap-3">
             <Select value={timeRange} onValueChange={setTimeRange}>
               <SelectTrigger className="w-[140px] bg-card/50">
@@ -227,17 +218,17 @@ const SecurityScore = () => {
             </div>
           </div>
         </div>
-      </main>
 
-      {/* PDF Preview Modal */}
-      <PDFPreviewModal
-        isOpen={showPreview}
-        onClose={handleClosePreview}
-        pdfUrl={pdfResult?.url ?? null}
-        fileName={pdfResult?.fileName ?? "security-report.pdf"}
-        onDownload={handleDownload}
-      />
-    </div>
+        {/* PDF Preview Modal */}
+        <PDFPreviewModal
+          isOpen={showPreview}
+          onClose={handleClosePreview}
+          pdfUrl={pdfResult?.url ?? null}
+          fileName={pdfResult?.fileName ?? "security-report.pdf"}
+          onDownload={handleDownload}
+        />
+      </div>
+    </DashboardLayout>
   );
 };
 

@@ -1,10 +1,9 @@
-import { ArrowLeft, GitPullRequest, Clock, AlertTriangle, CheckCircle, XCircle, EyeOff } from "lucide-react";
-import { Link, useParams } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import { GitPullRequest, Clock, AlertTriangle, CheckCircle, XCircle, EyeOff } from "lucide-react";
+import { useParams } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { TopNavigation } from "@/components/dashboard/TopNavigation";
+import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { VulnerabilityCard } from "@/components/dashboard/VulnerabilityCard";
 import { useDismissedVulnerabilities, DismissReason } from "@/hooks/useDismissedVulnerabilities";
 
@@ -132,17 +131,8 @@ const PRScanView = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <TopNavigation isConnected={true} plan="free" />
-
-      <main className="container mx-auto px-4 py-6 max-w-6xl">
-        {/* Back Navigation */}
-        <Link to="/dashboard">
-          <Button variant="ghost" size="sm" className="mb-6 -ml-2">
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Dashboard
-          </Button>
-        </Link>
+    <DashboardLayout>
+      <div className="container mx-auto px-4 py-6 max-w-6xl">
 
         {/* PR Header */}
         <div className="mb-8">
@@ -301,8 +291,8 @@ const PRScanView = () => {
             )}
           </TabsContent>
         </Tabs>
-      </main>
-    </div>
+      </div>
+    </DashboardLayout>
   );
 };
 
