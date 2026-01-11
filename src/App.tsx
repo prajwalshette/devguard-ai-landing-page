@@ -9,6 +9,7 @@ import PRScanView from "./pages/PRScanView";
 import SecurityScore from "./pages/SecurityScore";
 import Settings from "./pages/Settings";
 import Repositories from "./pages/Repositories";
+import PullRequests from "./pages/PullRequests";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +27,7 @@ const App = () => (
           <Route path="/security-score" element={<SecurityScore />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/repositories" element={<Repositories />} />
+          <Route path="/pull-requests" element={<PullRequests />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
