@@ -5,6 +5,7 @@ import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { VulnerabilityCard } from "@/components/dashboard/VulnerabilityCard";
+import { BatchSecurityAnalysis } from "@/components/dashboard/BatchSecurityAnalysis";
 import { useDismissedVulnerabilities, DismissReason } from "@/hooks/useDismissedVulnerabilities";
 
 const mockVulnerabilities = [
@@ -198,6 +199,17 @@ const PRScanView = () => {
             </div>
             <Progress value={100} className="h-2" />
           </div>
+        </div>
+
+        {/* Batch AI Analysis */}
+        <div className="mb-8">
+          <BatchSecurityAnalysis 
+            vulnerabilities={activeVulnerabilities}
+            context={{
+              prTitle: `PR #${prId || "142"}: Add user authentication flow`,
+              prId: prId || "142",
+            }}
+          />
         </div>
 
         {/* Vulnerabilities List */}
