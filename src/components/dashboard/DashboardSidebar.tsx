@@ -7,6 +7,7 @@ import {
   FolderGit2,
   Bell,
   HelpCircle,
+  TrendingUp,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import {
@@ -27,6 +28,7 @@ import { DevGuardLogo } from "./DevGuardLogo";
 const mainNavItems = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
   { title: "Security Score", url: "/security-score", icon: Shield },
+  { title: "Security Trends", url: "/security-trends", icon: TrendingUp },
   { title: "Repositories", url: "/repositories", icon: FolderGit2 },
   { title: "Pull Requests", url: "/pull-requests", icon: GitPullRequest },
 ];
