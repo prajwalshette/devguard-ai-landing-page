@@ -7,6 +7,7 @@ import { QuickActionsPanel } from "@/components/dashboard/QuickActionsPanel";
 import { TeamActivityFeed } from "@/components/dashboard/TeamActivityFeed";
 import { DependencyGraph } from "@/components/dashboard/DependencyGraph";
 import { SecurityTimeline } from "@/components/dashboard/SecurityTimeline";
+import { SecurityRecommendations } from "@/components/dashboard/SecurityRecommendations";
 
 const Dashboard = () => {
   return (
@@ -54,6 +55,9 @@ const Dashboard = () => {
             <DependencyGraph />
             <TeamActivityFeed />
           </div>
+
+          {/* AI Recommendations */}
+          <SecurityRecommendations />
 
           {/* Bottom Row: Recent Activity */}
           <RecentActivity />
