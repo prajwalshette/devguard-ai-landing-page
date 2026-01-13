@@ -8,6 +8,7 @@ import {
   Bell,
   HelpCircle,
   TrendingUp,
+  FileCheck,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import {
@@ -29,6 +30,7 @@ const mainNavItems = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
   { title: "Security Score", url: "/security-score", icon: Shield },
   { title: "Security Trends", url: "/security-trends", icon: TrendingUp },
+  { title: "Compliance", url: "/compliance", icon: FileCheck },
   { title: "Repositories", url: "/repositories", icon: FolderGit2 },
   { title: "Pull Requests", url: "/pull-requests", icon: GitPullRequest },
 ];
