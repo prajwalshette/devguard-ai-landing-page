@@ -8,6 +8,7 @@ import Dashboard from "./pages/Dashboard";
 import PRScanView from "./pages/PRScanView";
 import SecurityScore from "./pages/SecurityScore";
 import SecurityTrends from "./pages/SecurityTrends";
+import Compliance from "./pages/Compliance";
 import Settings from "./pages/Settings";
 import Repositories from "./pages/Repositories";
 import PullRequests from "./pages/PullRequests";
@@ -27,6 +28,7 @@ const App = () => (
           <Route path="/pr/:prId" element={<PRScanView />} />
           <Route path="/security-score" element={<SecurityScore />} />
           <Route path="/security-trends" element={<SecurityTrends />} />
+          <Route path="/compliance" element={<Compliance />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/repositories" element={<Repositories />} />
           <Route path="/pull-requests" element={<PullRequests />} />
