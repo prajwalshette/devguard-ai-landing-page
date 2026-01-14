@@ -11,3 +11,6 @@ verify_jwt = false
 
 [functions.batch-security-analysis]
 verify_jwt = false
+
+[functions.trigger-notification]
+verify_jwt = false

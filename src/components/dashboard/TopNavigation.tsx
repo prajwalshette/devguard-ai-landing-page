@@ -1,6 +1,7 @@
 import { Github, Zap } from "lucide-react";
 import { DevGuardLogo } from "./DevGuardLogo";
 import { GitHubSettingsDialog } from "./GitHubSettingsDialog";
+import { NotificationCenter } from "./NotificationCenter";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Link } from "react-router-dom";
@@ -21,6 +22,8 @@ export function TopNavigation({ isConnected, plan }: TopNavigationProps) {
         </div>
 
         <div className="flex items-center gap-4">
+          <NotificationCenter />
+          
           <GitHubSettingsDialog />
           
           <div className="flex items-center gap-2">
