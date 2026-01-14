@@ -1,1 +1,13 @@
 project_id = "dbiekqdkepyworzvunwg"
+
+[functions.auto-remediation]
+verify_jwt = false
+
+[functions.security-recommendations]
+verify_jwt = false
+
+[functions.security-insights]
+verify_jwt = false
+
+[functions.batch-security-analysis]
+verify_jwt = false
