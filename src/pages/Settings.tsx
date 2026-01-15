@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { User, Bell, Shield, Key, Palette, Globe } from "lucide-react";
+import { User, Bell, Shield, Key, Palette, Globe, Scan } from "lucide-react";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,6 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
+import { ScheduledScanning } from "@/components/dashboard/ScheduledScanning";
 
 const Settings = () => {
   const [emailNotifications, setEmailNotifications] = useState(true);
@@ -43,6 +44,10 @@ const Settings = () => {
             <TabsTrigger value="profile" className="gap-2">
               <User className="h-4 w-4" />
               Profile
+            </TabsTrigger>
+            <TabsTrigger value="scanning" className="gap-2">
+              <Scan className="h-4 w-4" />
+              Scanning
             </TabsTrigger>
             <TabsTrigger value="notifications" className="gap-2">
               <Bell className="h-4 w-4" />
@@ -120,6 +125,11 @@ const Settings = () => {
                 <Button onClick={handleSave}>Save Changes</Button>
               </div>
             </div>
+          </TabsContent>
+
+          {/* Scanning Tab */}
+          <TabsContent value="scanning">
+            <ScheduledScanning />
           </TabsContent>
 
           {/* Notifications Tab */}
