@@ -50,6 +50,119 @@ export type Database = {
         }
         Relationships: []
       }
+      scan_history: {
+        Row: {
+          completed_at: string | null
+          duration_seconds: number | null
+          error_message: string | null
+          files_scanned: number | null
+          high_count: number | null
+          id: string
+          low_count: number | null
+          medium_count: number | null
+          metadata: Json | null
+          repository_name: string
+          schedule_id: string | null
+          started_at: string
+          status: string
+          trigger_type: string
+          vulnerabilities_found: number | null
+        }
+        Insert: {
+          completed_at?: string | null
+          duration_seconds?: number | null
+          error_message?: string | null
+          files_scanned?: number | null
+          high_count?: number | null
+          id?: string
+          low_count?: number | null
+          medium_count?: number | null
+          metadata?: Json | null
+          repository_name: string
+          schedule_id?: string | null
+          started_at?: string
+          status: string
+          trigger_type: string
+          vulnerabilities_found?: number | null
+        }
+        Update: {
+          completed_at?: string | null
+          duration_seconds?: number | null
+          error_message?: string | null
+          files_scanned?: number | null
+          high_count?: number | null
+          id?: string
+          low_count?: number | null
+          medium_count?: number | null
+          metadata?: Json | null
+          repository_name?: string
+          schedule_id?: string | null
+          started_at?: string
+          status?: string
+          trigger_type?: string
+          vulnerabilities_found?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scan_history_schedule_id_fkey"
+            columns: ["schedule_id"]
+            isOneToOne: false
+            referencedRelation: "scan_schedules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      scan_schedules: {
+        Row: {
+          created_at: string
+          enabled: boolean
+          id: string
+          last_scan_at: string | null
+          next_scan_at: string | null
+          notify_on_complete: boolean | null
+          notify_on_critical: boolean | null
+          repository_name: string
+          repository_url: string
+          scan_branches: string[] | null
+          schedule_day: number | null
+          schedule_time: string | null
+          schedule_type: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          last_scan_at?: string | null
+          next_scan_at?: string | null
+          notify_on_complete?: boolean | null
+          notify_on_critical?: boolean | null
+          repository_name: string
+          repository_url: string
+          scan_branches?: string[] | null
+          schedule_day?: number | null
+          schedule_time?: string | null
+          schedule_type: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          last_scan_at?: string | null
+          next_scan_at?: string | null
+          notify_on_complete?: boolean | null
+          notify_on_critical?: boolean | null
+          repository_name?: string
+          repository_url?: string
+          scan_branches?: string[] | null
+          schedule_day?: number | null
+          schedule_time?: string | null
+          schedule_type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
