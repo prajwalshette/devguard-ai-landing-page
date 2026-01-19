@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { User, Bell, Shield, Key, Palette, Globe, Scan } from "lucide-react";
+import { User, Bell, Shield, Key, Palette, Globe, Scan, Webhook } from "lucide-react";
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import { ScheduledScanning } from "@/components/dashboard/ScheduledScanning";
+import { WebhookIntegration } from "@/components/dashboard/WebhookIntegration";
 
 const Settings = () => {
   const [emailNotifications, setEmailNotifications] = useState(true);
@@ -56,6 +57,10 @@ const Settings = () => {
             <TabsTrigger value="security" className="gap-2">
               <Shield className="h-4 w-4" />
               Security
+            </TabsTrigger>
+            <TabsTrigger value="webhooks" className="gap-2">
+              <Webhook className="h-4 w-4" />
+              Webhooks
             </TabsTrigger>
             <TabsTrigger value="integrations" className="gap-2">
               <Key className="h-4 w-4" />
@@ -262,6 +267,11 @@ const Settings = () => {
                 <Button onClick={handleSave}>Save Changes</Button>
               </div>
             </div>
+          </TabsContent>
+
+          {/* Webhooks Tab */}
+          <TabsContent value="webhooks">
+            <WebhookIntegration />
           </TabsContent>
 
           {/* Integrations Tab */}

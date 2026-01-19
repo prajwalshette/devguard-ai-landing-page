@@ -163,6 +163,36 @@ export type Database = {
         }
         Relationships: []
       }
+      webhook_tokens: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          last_used_at: string | null
+          name: string
+          repository_name: string | null
+          token: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          last_used_at?: string | null
+          name: string
+          repository_name?: string | null
+          token: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          last_used_at?: string | null
+          name?: string
+          repository_name?: string | null
+          token?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
